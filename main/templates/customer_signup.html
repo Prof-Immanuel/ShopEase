@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Signup</title>
+    <link rel="stylesheet" href="{% static 'customer_signup.css' %}">
+</head>
+<body>
+    <div class="main-container">
+        <!-- Form Box -->
+        <div class="form-box">
+            <h2>Customer Signup</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Username:</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="error-messages">
+                            {% for error in form.username.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_phone_number">Phone Number:</label>
+                    {{ form.phone_number }}
+                    {% if form.phone_number.errors %}
+                        <div class="error-messages">
+                            {% for error in form.phone_number.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password">Password:</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div class="error-messages">
+                            {% for error in form.password.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit">Sign Up</button>
+            </form>
+            <p class="login-link">
+                Already have an account? <a href="{% url 'login' %}">Log in here</a>.
+            </p>
+        </div>
+
+        <!-- Welcome Box -->
+        <div class="welcome-box">
+            <h3>Welcome to ShopEase!</h3>
+            <p>We are thrilled to have you join our platform. At ShopEase, we provide a seamless online shopping and delivery experience. Explore various products from trusted sellers, and enjoy convenient deliveries right to your door!</p>
+            <p>If you have any questions or need assistance, feel free to contact us:</p>
+            <p class="contact-info">+260 779 169 401</p>
+        </div>
+    </div>
+</body>
+</html>

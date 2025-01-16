@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Seller</title>
+    <link rel="stylesheet" href="{% static 'edit_pages.css' %}"> <!-- Link to the CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Seller</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="founder">Founder:</label>
+            <input type="text" id="founder" name="founder" value="{{ seller.founder }}" required>
+
+            <label for="company_name">Company Name:</label>
+            <input type="text" id="company_name" name="company_name" value="{{ seller.company_name }}" required>
+            
+            <label for="phone_number">Phone Number:</label>
+            <input type="text" id="phone_number" name="phone_number" value="{{ seller.phone_number }}" required>
+            
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>

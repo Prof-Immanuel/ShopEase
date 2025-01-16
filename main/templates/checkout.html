@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase - Checkout</title>
+    <link rel="stylesheet" href="{% static 'checkout.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Checkout</h1>
+    </header>
+
+    <main>
+        <section class="cart-summary">
+            <h2>Your Order</h2>
+            <ul class="cart-items">
+                {% for item in cart_items %}
+                    <li>
+                        <span class="product-name">{{ item.product.name }}</span> 
+                        <span class="product-quantity">x{{ item.quantity }}</span>
+                        <span class="product-price">K{{ item.total_price }}</span>
+                        <span class="product-seller">Sold by: {{ item.product.seller.company_name }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="price-summary">
+                <p>Total Price: K<span id="total-price">{{ total_price }}</span></p>
+                <p>Delivery Fee: K<span id="delivery-fee">{{ delivery_fee }}</span></p>
+                <h3>Grand Total: K<span id="grand-total">{{ grand_total }}</span></h3>
+            </div>
+        </section>
+
+        <section class="checkout-instructions">
+            <p>Please pay the <strong>Grand Total</strong> after delivery. Once your order is confirmed, we will contact you to arrange delivery.</p>
+        </section>
+
+        <a href="{% url 'checkout_confirm' %}" class="checkout-button">Checkout</a>
+    </main>
+</body>
+</html>

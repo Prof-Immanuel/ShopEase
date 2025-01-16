@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Seller</title>
+    <link rel="stylesheet" href="{% static 'edit_pages.css' %}"> <!-- Link to the CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Product</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="name">Product Name:</label>
+            <input type="text" id="name" name="name" value="{{ product.name }}" required>
+            
+            <label for="category">Category:</label>
+            <select id="category" name="category" required>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if product.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            
+            <label for="seller">Seller:</label>
+            <select id="seller" name="seller" required>
+                {% for seller in sellers %}
+                <option value="{{ seller.id }}" {% if product.seller.id == seller.id %}selected{% endif %}>{{ seller.company_name }}</option>
+                {% endfor %}
+            </select>
+            
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" value="{{ product.price }}" step="0.01" required>
+            
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required>{{ product.description }}</textarea>
+            
+            <label for="image">Image:</label>
+            <input type="file" id="image" name="image">
+            
+            <label for="in_stock">In Stock:</label>
+            <input type="checkbox" id="in_stock" name="in_stock" {% if product.in_stock %}checked{% endif %}>
+            
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>
+

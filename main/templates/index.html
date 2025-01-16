@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to ShopEase</title>
+    <link rel="stylesheet" href="{% static 'welcome.css' %}">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="welcome-header">
+        <h1>Welcome to ShopEase</h1>
+        <p>Your one-stop platform for shopping and selling with ease!</p>
+        <div class="buttons">
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'products' %}">Shop now</a>
+            <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+            <a href="https://wa.me/+260779169401?text=I%20want%20to%20start%20selling%20on%20ShopEase" target="_blank">Sell on ShopEase</a>
+            <a href="{% url 'customer_signup' %}">Sign Up</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Choose a Service Section -->
+    <section class="services">
+        <h2>Choose a Service</h2>
+        <div class="service-container">
+            <div class="service">
+                <h3>Online Shopping</h3>
+                <p>Browse and purchase a wide variety of products from the comfort of your home.</p>
+                <a href="{% url 'products' %}" class="service-button">Shop Now</a>
+            </div>
+            <div class="service">
+                <h3>Parcel Delivery</h3>
+                <p>Reliable and fast delivery of parcels to your doorstep or your customers.</p>
+                <a href="https://wa.me/260779169401?text=Hello%2C+I+want+to+inquire+about+parcel+delivery." 
+                target="_blank" 
+                class="service-button">
+                 Parcel Delivery
+             </a>
+            </div>
+            <div class="service">
+                <h3>Taxi Hire</h3>
+                <p>Convenient taxi hire services to get you where you need to go, safely and on time</p>
+                <a href="https://wa.me/260779169401?text=Hello%2C+I+would+like+to+hire+a+taxi." 
+       target="_blank" 
+       class="service-button">
+        Hire a Taxi
+    </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reasons Section -->
+    <section class="reasons">
+        <h2>Why Join ShopEase?</h2>
+        <ul>
+            <li>Wide customer base for sellers to showcase their products.</li>
+            <li>Seamless shopping experience with a user-friendly platform.</li>
+            <li>Fast and reliable delivery service.</li>
+            <li>24/7 customer support to assist you.</li>
+            <li>Grow your business with ShopEase marketing tools.</li>
+        </ul>
+    </section>
+
+    
+
+    <!-- Footer Section -->
+    <footer class="welcome-footer">
+        <p>&copy; {{ year }} ShopEase. All Rights Reserved.</p>
+        <p>
+            Follow us on 
+            <a href="https://www.facebook.com" target="_blank">Facebook</a> | 
+            <a href="https://www.twitter.com" target="_blank">Twitter</a> | 
+            <a href="https://www.instagram.com" target="_blank">Instagram</a>
+        </p>
+    </footer>
+
+</body>
+</html>

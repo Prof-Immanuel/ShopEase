@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+    <main>
+        <h2>Create Seller</h2>
+        <form method="post" action="{% url 'create_seller' %}">
+            {% csrf_token %}
+            <label for="founder">Founder:</label>
+            <input type="text" id="founder" name="founder" required>
+            <label for="company_name">Company Name:</label>
+            <input type="text" id="company_name" name="company_name" required>
+            <label for="phone_number">Phone Number:</label>
+            <input type="text" id="phone_number" name="phone_number" required>
+            <input type="submit" value="Create Seller">
+        </form>
+
+        <h2>Create Category</h2>
+        <form method="post" action="{% url 'create_category' %}">
+            {% csrf_token %}
+            <label for="name">Category Name:</label>
+            <input type="text" id="name" name="name" required>
+            <input type="submit" value="Create Category">
+        </form>
+
+        <h2>Create Product</h2>
+        <form method="post" action="{% url 'create_product' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="name">Product Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="category">Category:</label>
+            <select id="category" name="category" required>
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="seller">Seller:</label>
+            <select id="seller" name="seller" required>
+                {% for seller in sellers %}
+                    <option value="{{ seller.id }}">{{ seller.company_name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+
+            <label for="in_stock">In Stock:</label>
+            <input type="checkbox" id="in_stock" name="in_stock">
+
+            <label for="image">Product Image:</label>
+            <input type="file" id="image" name="image" accept="image/*">
+
+            <input type="submit" value="Create Product">
+        </form>
+
+        <h2>Existing Sellers</h2>
+        <table>
+            <tr>
+                <th>Company Name</th>
+                <th>Actions</th>
+            </tr>
+            {% for seller in sellers %}
+                <tr>
+                    <td>{{ seller.company_name }}</td>
+                    <td>
+                        <a href="{% url 'edit_seller' seller.id %}">Edit</a> |
+                        <a href="{% url 'delete_seller' seller.id %}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Existing Categories</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.name }}</td>
+                    <td>
+                        <a href="{% url 'edit_category' category.id %}">Edit</a> |
+                        <a href="{% url 'delete_category' category.id %}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Existing Products</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Seller</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category.name }}</td>
+                    <td>{{ product.seller.company_name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>
+                        <a href="{% url 'edit_product' product.id %}">Edit</a> |
+                        <a href="{% url 'delete_product' product.id %}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </main>
+</body>
+</html>

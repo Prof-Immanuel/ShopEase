@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase - Cart</title>
+    <link rel="stylesheet" href="{% static 'cart.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Your Cart</h1>
+    </header>
+
+    {% if cart_items %}
+        <ul id="cart-items">
+            {% for item in cart_items %}
+                <li data-item-id="{{ item.id }}">
+                    <span>{{ item.product.name }}</span>
+                    <button class="update-quantity" data-action="decrement">-</button>
+                    <input type="text" class="quantity" value="{{ item.quantity }}" readonly>
+                    <button class="update-quantity" data-action="increment">+</button>
+                     - K<span class="item-total">{{ item.total_price }}</span>
+                    <button class="remove-item" data-item-id="{{ item.id }}">Remove</button>
+                </li>
+            {% endfor %}
+        </ul>
+    
+        <h3>Total: K<span id="total-price">{{ total_price }}</span></h3>
+        <div class="parent-container">
+        <a href="{% url 'checkout' %}" class="checkout-button">Proceed to Checkout</a>
+        </div>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+    
+    <a href="{% url 'products' %}">Continue Shopping</a>
+
+    <script>
+        $(document).ready(function() {
+            // Update quantity using AJAX
+            $('.update-quantity').on('click', function(e) {
+                e.preventDefault();
+                const button = $(this);
+                const itemId = button.closest('li').data('item-id');
+                const action = button.data('action');
+
+                $.ajax({
+                    url: `/cart/update/${itemId}/`,
+                    type: 'POST',
+                    data: {
+                        action: action,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function(response) {
+                        // Update the quantity and item total price in the UI
+                        const item = $(`li[data-item-id="${itemId}"]`);
+                        item.find('.quantity').val(response.new_quantity);
+                        item.find('.item-total').text(response.item_total);
+
+                        // Update the cart total price
+                        $('#total-price').text(response.cart_total);
+                    },
+                    error: function(xhr) {
+                        alert('Error updating quantity. Please try again.');
+                    }
+                });
+            });
+
+           // Remove item from cart using AJAX
+           $('.remove-item').on('click', function (e) {
+            e.preventDefault();
+    
+            const button = $(this);
+            const itemId = button.data('item-id');
+    
+            $.ajax({
+                url: `/cart/remove/${itemId}/`,
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}', // Include CSRF token
+                },
+                success: function (response) {
+                    if (response.message) {
+                        // Remove the item from the UI
+                        $(`li[data-item-id="${itemId}"]`).remove();
+    
+                        // Update the total price
+                        $('#total-price').text(response.cart_total);
+    
+                        // Show empty cart message if no items remain
+                        if ($('#cart-items li').length === 0) {
+                            $('#cart-items').html('<p>Your cart is empty.</p>');
+                        }
+                    } else {
+                        alert('Unexpected response from server.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error removing item:", xhr.responseText);
+                    alert('Error removing item. Please try again.');
+                }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase - Products</title>
+    <link rel="stylesheet" href="{% static 'products.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>ShopEase</h1>
+        <form method="get" action="{% url 'products' %}" class="search-container">
+            <input type="text" name="search" placeholder="Search for products..." value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Categories Sidebar -->
+        <aside class="categories">
+            <button class="toggle-btn" id="categories-toggle">
+                Categories <span class="arrow">&#x25BC;</span>
+            </button>
+            <ul class="category-list" id="category-list">
+                <li>
+                    <a href="{% url 'products' %}?category=all" class="category-item {% if not selected_category %}selected{% endif %}">All Products</a>
+                </li>
+                {% for category in categories %}
+                    <li>
+                        <a href="{% url 'products' %}?category={{ category }}" class="category-item {% if category == selected_category %}selected{% endif %}">{{ category }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </aside>
+
+        <!-- Products Section -->
+        <section class="products">
+            <header>
+                <h2>Showing {{ page_obj.paginator.count }} Products</h2>
+            </header>
+            <div class="product-list">
+                {% for product in page_obj %}
+                    <div class="product-card">
+                        <!-- Link to Product Details -->
+                        <a href="{% url 'product_details' product.id %}" class="product-link">
+                            <div class="product-card-content">
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                <h3>{{ product.name }}</h3>
+                                <p>K{{ product.price }}</p>
+                            </div>
+                        </a>
+        
+                        <!-- Add to Cart Button -->
+                        <a href="{% url 'cart_add' product.id %}" class="add-to-cart" data-product-id="{{ product.id }}">Add to Cart</a>
+                    </div>
+                {% empty %}
+                    <p>No products found.</p>
+                {% endfor %}
+            </div>
+        
+            <!-- Pagination Controls -->
+            <div class="pagination">
+                <ul class="step-links">
+                    {% if page_obj.has_previous %}
+                        <li><a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">First</a></li>
+                        <li><a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">Previous</a></li>
+                    {% endif %}
+            
+                    <li class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</li>
+            
+                    {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">Next</a></li>
+                        <li><a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">Last</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            
+        </section>
+        
+
+        <!-- Floating Buttons -->
+<div class="floating-buttons">
+    <!-- Cart Button -->
+    <a href="{% url 'cart_detail' %}" class="floating-button cart-btn">
+        <img src="{% static 'media/cart.png' %}" alt="Cart">
+        <span id="cart-item-count">{{ cart_item_count }}</span>
+    </a>
+    
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/+260779169401" class="floating-button whatsapp-btn" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/120px-WhatsApp.svg.png" alt="WhatsApp">
+    </a>
+    
+    <!-- Home Button -->
+    <a href="{% url 'home' %}" class="floating-button home-btn">
+        <img src="https://th.bing.com/th/id/R.e34559be533ae283dfe15fa4c13bfead?rik=7lD1pXDYJCBX0Q&pid=ImgRaw&r=0" alt="Home">
+    </a>
+</div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        $(document).ready(function () {
+            // Update cart item count in real-time when a product is added to the cart
+            $(".add-to-cart").click(function (e) {
+                e.preventDefault(); // Prevent the default link behavior
+            
+                const productId = $(this).data("product-id"); // Get the product ID from data attribute
+                const url = $(this).attr("href"); // Get the URL of the add-to-cart endpoint
+            
+                // Send an AJAX POST request
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}", // Include CSRF token
+                        product_id: productId,
+                    },
+                    success: function (response) {
+                        // Provide feedback to the user
+                        alert("Product added to cart successfully!");
+            
+                        // Update the cart item count
+                        updateCartItemCount(response.cart_item_count);
+                    },
+                    error: function () {
+                        alert("Failed to add product to cart. Please try again.");
+                    },
+                });
+            });
+            
+            // Function to update the cart item count in real-time
+            function updateCartItemCount(count) {
+                $('#cart-item-count').text(count); // Set the count in the cart button
+            }
+        });
+        
+    </script>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
