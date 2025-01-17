@@ -1,0 +1,191 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header Section */
+.welcome-header {
+    background: linear-gradient(to right, #1e88e5, #64b5f6); /* Blue gradient */
+    color: white;
+    text-align: center;
+    padding: 2rem;
+}
+
+.welcome-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.welcome-header p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.buttons a {
+    text-decoration: none;
+    background: white;
+    color: #1e88e5;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 2px solid #1e88e5;
+    transition: all 0.3s ease;
+}
+
+.buttons a:hover {
+    background: #1e88e5;
+    color: white;
+}
+
+/* Reasons Section */
+.reasons {
+    padding: 2rem;
+    text-align: center;
+    background-color: #f1f8fe; /* Light blue background */
+}
+
+.reasons h2 {
+    color: #1e88e5;
+    margin-bottom: 1rem;
+}
+
+.reasons ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 600px;
+    text-align: left;
+}
+
+.reasons ul li {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.reasons ul li::before {
+    content: "✓";
+    color: #1e88e5;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+/* Services Section */
+.services {
+    padding: 2rem;
+    text-align: center;
+    background-color: #e3f2fd; /* Very light blue background */
+}
+
+.services h2 {
+    color: #1e88e5;
+    margin-bottom: 1.5rem;
+}
+
+.service-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.service {
+    background: white;
+    border: 2px solid #1e88e5;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    width: 250px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.service h3 {
+    color: #1e88e5;
+    margin-bottom: 1rem;
+}
+
+.service p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: #555;
+}
+
+.service-button {
+    text-decoration: none;
+    background: #1e88e5;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.service-button:hover {
+    background: #1565c0; /* Darker blue */
+}
+
+/* Footer Section */
+.welcome-footer {
+    background-color: #1565c0; /* Darker blue */
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.welcome-footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.welcome-footer a {
+    color: #64b5f6;
+    text-decoration: none;
+}
+
+.welcome-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .welcome-header h1 {
+        font-size: 2rem;
+    }
+
+    .welcome-header p {
+        font-size: 1rem;
+    }
+
+    .buttons a {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .service-container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .service {
+        width: 90%; 
+        padding: 1rem;
+    }
+}
