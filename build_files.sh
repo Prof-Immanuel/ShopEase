@@ -10,6 +10,6 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # collect static files using the Python interpreter from venv
-python manage.py collectstatic --noinput
+python3.10.7 manage.py collectstatic --noinput
 
 echo "BUILD END"
