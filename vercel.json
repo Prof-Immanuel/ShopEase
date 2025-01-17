@@ -1,24 +1,13 @@
 {
-  "version": 2,
-  "builds": [
-    {
+  "builds": [{
       "src": "shopease/wsgi.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.7" }
-    },
-    {
-      "src": "build_files.sh",
-      "use": "@vercel/static"
-    }
-  ],
+      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+  }],
   "routes": [
-    {
-      "src": "/staticfiles/(.*)",
-      "dest": "/staticfiles/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "shopease/wsgi.py"
-    }
+      {
+          "src": "/(.*)",
+          "dest": "shopease/wsgi.py"
+      }
   ]
 }
