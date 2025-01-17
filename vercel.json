@@ -3,8 +3,8 @@
   "builds": [
     {
       "src": "shopease/wsgi.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.7.7" }
+      "use": "@vercel/python3",
+      "config": { "maxLambdaSize": "15mb", "runtime": "python3" }
     },
     {
       "src": "build_files.sh",
