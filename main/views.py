@@ -246,6 +246,8 @@ def checkout_page(request):
         return render(request, 'checkout.html', {'cart_items': []})
 
 
+
+
 def checkout_confirm(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -257,54 +259,61 @@ def checkout_confirm(request):
         # Get the customer's name (assuming the user model has a first_name or username)
         customer_name = request.user.first_name if request.user.first_name else request.user.username
 
-        # Generate the WhatsApp message with pre-filled cart details
-        message = f"Hello ShopEase,\n\nI, {customer_name}, would like to place the following order:\n"
-        for item in cart_items:
-            seller_name = item.product.seller.company_name if item.product.seller else "ShopEase"  # Default to ShopEase if no seller
-            message += f"- {item.product.name} (x{item.quantity}): K{item.total_price()} (Seller: {seller_name})\n"
-    
+        # Calculate totals
         total_price = sum(item.total_price() for item in cart_items)
         delivery_fee = Decimal("25.00")
         grand_total = total_price + delivery_fee
 
-        message += f"\nTotal Price: K{total_price}\nDelivery Fee: K{delivery_fee}\nGrand Total: K{grand_total}\n"
+        # Create an order
+        order = Order.objects.create(
+            user=request.user,
+            total_price=total_price,
+            delivery_fee=delivery_fee,
+            grand_total=grand_total
+        )
 
-        # Replace spaces and newlines for WhatsApp URL
-        encoded_message = message.replace(' ', '%20').replace('\n', '%0A')
-        whatsapp_number = "+260779169401"  
-        whatsapp_url = f"https://wa.me/{whatsapp_number}?text={encoded_message}"
-        
+        # Add items to the order
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product.name,
+                quantity=item.quantity,
+                price=item.total_price()
+            )
+
         # Send order details via email
         email_subject = f"New Order Received from {customer_name}"
-        email_body = (
-            f"Order Details for {customer_name} ({request.user.username}):\n\n"
-            f"{message}\n\n"
-            f"Thank you,\nShopEase"
-        )
-        
-        
+        email_body = f"Order Details for {customer_name} ({request.user.username}):\n\n"
+
+        for item in cart_items:
+            seller_name = item.product.seller.company_name if item.product.seller else "ShopEase"
+            email_body += f"- {item.product.name} (x{item.quantity}): K{item.total_price()} (Seller: {seller_name})\n"
+
+        email_body += f"\nTotal Price: K{total_price}\nDelivery Fee: K{delivery_fee}\nGrand Total: K{grand_total}\n"
+        email_body += "\nThank you,\nShopEase"
+
         send_mail(
             email_subject,
             email_body,
             settings.DEFAULT_FROM_EMAIL,
-            ["shopeasezm@gmail.com"], 
+            ["shopeasezm@gmail.com"],
         )
-        
+
         # Clear the cart after confirming the order
         cart_items.delete()
-        
-        # Redirect to WhatsApp
-        return redirect(whatsapp_url)
+
+        return render(request, 'order_confirmation.html', {'order': order})
 
     except Cart.DoesNotExist:
         return JsonResponse({'error': 'No items in cart'}, status=400)
+
     
     
 
 
 @login_required(login_url='login')
 def admin_dashboard(request):
-    if not request.user.is_superuser:  # Check if the user is not a superuser
+    if not request.user.is_superuser:  
         return HttpResponseForbidden("You do not have permission to access this page.")
     
     sellers = Seller.objects.all()
