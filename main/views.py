@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
 from django.core.paginator import Paginator
+from django.http import HttpResponseForbidden
 # Create your views here.
 
 
@@ -303,6 +304,9 @@ def checkout_confirm(request):
 
 @login_required(login_url='login')
 def admin_dashboard(request):
+    if not request.user.is_superuser:  # Check if the user is not a superuser
+        return HttpResponseForbidden("You do not have permission to access this page.")
+    
     sellers = Seller.objects.all()
     categories = Category.objects.all()
     products = Product.objects.all().order_by('-created_at')
@@ -311,7 +315,7 @@ def admin_dashboard(request):
         'categories': categories,
         'products': products,
     })
-
+    
 @login_required(login_url='login')
 def create_seller(request):
     if request.method == 'POST':
