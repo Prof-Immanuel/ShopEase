@@ -124,24 +124,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Example data -->
+                        {% for item in order_items %}
                         <tr>
-                            <td>Product Name 1</td>
-                            <td>2</td>
-                            <td>K100</td>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>K{{ item.total_price }}</td>
                         </tr>
-                        <tr>
-                            <td>Product Name 2</td>
-                            <td>1</td>
-                            <td>K50</td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
             <div class="summary-total">
-                <p><span class="total-label">Subtotal:</span> K150</p>
-                <p><span class="total-label">Delivery Fee:</span> K25</p>
-                <p><span class="total-label">Grand Total:</span> <span class="total-amount">K175</span></p>
+                <p><span class="total-label">Subtotal:</span> K{{ subtotal }}</p>
+                <p><span class="total-label">Delivery Fee:</span> K{{ delivery_fee }}</p>
+                <p><span class="total-label">Grand Total:</span> <span class="total-amount">K{{ grand_total }}</span></p>
             </div>
         </div>
         <div class="confirmation-message">

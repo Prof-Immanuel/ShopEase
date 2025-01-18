@@ -301,8 +301,15 @@ def checkout_confirm(request):
 
         # Clear the cart after confirming the order
         cart_items.delete()
+        
+        context = {
+            "order_items": order.items.all(),
+            "subtotal":  total_price,
+            "delivery_fee": delivery_fee,
+            "grand_total": grand_total,
+        }
 
-        return render(request, 'order_confirmation.html', {'order': order})
+        return render(request, 'order_confirmation.html', context)
 
     except Cart.DoesNotExist:
         return JsonResponse({'error': 'No items in cart'}, status=400)
