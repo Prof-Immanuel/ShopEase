@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Category, Customer, Cart, CartItem, Seller
+from .models import Product, Category, Customer, Cart, CartItem, Seller, Order, OrderItem
 from .forms import CustomerRegistrationForm, SellerCreationForm, ProductForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
