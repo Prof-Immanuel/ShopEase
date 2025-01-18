@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Seller, Customer, Product, Category, Cart, CartItem
+from .models import Seller, Customer, Product, Category, Cart, CartItem, Order, OrderItem
 
 
 # Register Customer model with UserAdmin
@@ -25,3 +25,5 @@ admin.site.register(Product)
 admin.site.register(Category)
 admin.site.register(Cart)
 admin.site.register(CartItem)
+admin.site.register(Order)
+admin.site.register(OrderItem)
