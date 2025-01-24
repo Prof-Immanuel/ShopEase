@@ -142,13 +142,40 @@ button[type="submit"]:active {
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
 @media (max-width: 768px) {
     .main-container {
-        flex-direction: column;
+        flex-direction: column; /* Stack elements vertically */
+        justify-content: center; /* Center elements vertically */
+        align-items: center; /* Center elements horizontally */
+        padding: 10px; /* Add padding to prevent elements from touching edges */
+        overflow: hidden; /* Prevent overflow issues */
     }
 
     .form-box, .welcome-box {
-        flex: 1 1 100%;
+        flex: 1 1 auto; /* Allow elements to resize naturally */
+        width: 100%; /* Take up full width */
+        max-width: 90%; /* Prevent elements from exceeding the viewport width */
+        margin: 10px 0; /* Add spacing between stacked elements */
+        box-sizing: border-box; /* Ensure padding is included in the width calculation */
+    }
+
+    h2, h3 {
+        font-size: 1.4rem; /* Slightly smaller for smaller screens */
+    }
+
+    p {
+        font-size: 0.9rem; /* Ensure text fits well */
+    }
+
+    button[type="submit"] {
+        font-size: 1rem;
+        padding: 12px; /* Adjust padding for smaller screens */
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="password"] {
+        width: 90%; /* Ensure inputs don't overflow */
+        max-width: 100%; /* Prevent overflow */
     }
 }
